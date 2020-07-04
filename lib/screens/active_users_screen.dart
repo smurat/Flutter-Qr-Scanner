@@ -90,6 +90,66 @@ class _ActiveUsersState extends State<ActiveUsers> {
                   ? ListView.builder(
                       itemBuilder: (context, index) {
                         return ListTile(
+                          onTap: () {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) {
+                                return Container(
+                                  margin: EdgeInsets.symmetric(vertical: 125),
+                                  child: AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    contentPadding: const EdgeInsets.all(6.0),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 16.0),
+                                          child: Icon(Icons.account_circle),
+                                        ),
+                                        Text(
+                                          "User Details",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
+                                      ],
+                                    ),
+                                    content: SingleChildScrollView(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: <Widget>[
+                                            Text(
+                                                "Name : ${userInfos[index].name}"),
+                                            Text(
+                                                "Phone : ${userInfos[index].phone}"),
+                                            Text(
+                                                "Age : ${userInfos[index].age}"),
+                                            Text(
+                                                "Adress : ${userInfos[index].address}"),
+                                            Text(
+                                                "Company : ${userInfos[index].company}"),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    actions: [
+                                      FlatButton(
+                                        child: Text('CLOSE'),
+                                        onPressed: Navigator.of(context).pop,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           title: Text(userInfos[index].name),
                           subtitle: Text(userInfos[index].email),
                           leading: Icon(Icons.verified_user),
