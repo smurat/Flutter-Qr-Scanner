@@ -1,0 +1,20 @@
+
+
+-Login ekranı tasarımı
+-Login form validation
+Login datası tutulmalı (sharedpreferences veya hive)
+Kullanıcının login datası var ise kullanıcı listesine yönlendirilmeli, yoksa loginden sonra yönelndirilmeli
+
+Kullanıcı listesi
+-----
+Api adresinden çekilen veri dart classı olarak modellenecek
+Listede sadece isActive değeri true olanlar görünmeli
+name değerine göre kullanıcının tüm listeyi A-Z ye ve Z-A sıralama opsiyonu olmalı
+
+Logic işlemler mümkün mertebe provider classlarında olmalı
+Http istekleri dio kütüphanesiyle, isteklerin hatalı dönme ihtimalinin kontrolü yapılmalı
+Gereksiz state updatelerinden kaçınılmalı
+
+kullanici ilistesi icin api olarak
+https://dijitalacentem.net/api.json
+bu linkteki json datayi kullanabilirsin
