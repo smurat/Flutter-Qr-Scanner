@@ -17,10 +17,12 @@ class UsersViewModel with ChangeNotifier {
   UsersDataState _usersState;
   List<UsersDataModel> _usersData;
   UsersRepository _repository;
+  bool _sortAZ;
 
   UsersViewModel() {
     _repository = locator<UsersRepository>();
     _usersState = UsersDataState.InitialState;
+    _sortAZ = false;
   }
 
   UsersRepository get repository => _repository;
@@ -36,6 +38,13 @@ class UsersViewModel with ChangeNotifier {
 
   set state(UsersDataState value) {
     _usersState = value;
+    notifyListeners();
+  }
+
+  bool get sortList => _sortAZ;
+
+  set sortList(bool value) {
+    _sortAZ = value;
     notifyListeners();
   }
 

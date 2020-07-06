@@ -7,7 +7,6 @@ import 'dart:math' as math;
 
 class ActiveUsers extends StatefulWidget {
   Map<String, dynamic> loginFormData;
-
   ActiveUsers({this.loginFormData});
 
   @override
@@ -15,9 +14,7 @@ class ActiveUsers extends StatefulWidget {
 }
 
 class _ActiveUsersState extends State<ActiveUsers> {
-  UsersViewModel _usersViewModel;
   List<UsersDataModel> userInfos;
-  bool sortAZ = false;
 
   @override
   void initState() {
@@ -26,30 +23,30 @@ class _ActiveUsersState extends State<ActiveUsers> {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         print("Login Datası var");
         UsersViewModel _usersViewModel = context.read<UsersViewModel>();
-        _usersViewModel.getUsersData().then((value) => userInfos);
+        _usersViewModel.getUsersData().then((value) => userInfos = value);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Build context çalıştı");
-    _usersViewModel = Provider.of<UsersViewModel>(context);
-    print("State Durumu:" + _usersViewModel.state.toString());
-
-    userInfos = _usersViewModel.usersData;
-
     return WillPopScope(
       onWillPop: () {
         return new Future(() => false);
       },
-      child: Scaffold(
+      child: Consumer<UsersViewModel>(
+          builder: (context, UsersViewModel viewModel, child) {
+        print("Build context çalıştı");
+        print("State Durumu:" + viewModel.state.toString());
+        userInfos = viewModel.usersData;
+
+        return Scaffold(
           appBar: AppBar(
             title: Text("Active Users List"),
             leading: null,
             actions: [
               IconButton(
-                icon: !sortAZ
+                icon: !viewModel.sortList
                     ? Icon(Icons.sort_by_alpha)
                     : Transform(
                         transform: Matrix4.rotationY(math.pi),
@@ -59,15 +56,13 @@ class _ActiveUsersState extends State<ActiveUsers> {
                         ),
                       ),
                 onPressed: () {
-                  setState(() {
-                    sortAZ = !sortAZ;
-                    sortAZ
-                        ? _usersViewModel.usersData
-                            .sort((a, b) => a.name.compareTo(b.name))
-                        : _usersViewModel.usersData =
-                            _usersViewModel.usersData.reversed.toList();
-                  });
-                  print(_usersViewModel.usersData[0].name);
+                  viewModel.sortList = !viewModel.sortList;
+                  viewModel.sortList
+                      ? viewModel.usersData
+                          .sort((a, b) => a.name.compareTo(b.name))
+                      : viewModel.usersData =
+                          viewModel.usersData.reversed.toList();
+                  print(viewModel.usersData[0].name);
                 },
               ),
               SizedBox(
@@ -76,17 +71,17 @@ class _ActiveUsersState extends State<ActiveUsers> {
               IconButton(
                 icon: Icon(Icons.power_settings_new),
                 onPressed: () {
-                  _usersViewModel.deleteUserData().then((value) =>
+                  viewModel.deleteUserData().then((value) =>
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => LoginScreen())));
                 },
               ),
             ],
           ),
-          body: (_usersViewModel.state == UsersDataState.UsersDataLoading ||
-                  _usersViewModel.state == UsersDataState.InitialState)
+          body: (viewModel.state == UsersDataState.UsersDataLoading ||
+                  viewModel.state == UsersDataState.InitialState)
               ? Center(child: CircularProgressIndicator())
-              : (_usersViewModel.state == UsersDataState.UsersDataLoaded)
+              : (viewModel.state == UsersDataState.UsersDataLoaded)
                   ? ListView.builder(
                       itemBuilder: (context, index) {
                         return ListTile(
@@ -162,7 +157,9 @@ class _ActiveUsersState extends State<ActiveUsers> {
                         "An Error Occured",
                         style: TextStyle(fontSize: 24),
                       ),
-                    )),
+                    ),
+        );
+      }),
     );
   }
 }
