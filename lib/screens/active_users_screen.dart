@@ -57,11 +57,7 @@ class _ActiveUsersState extends State<ActiveUsers> {
                       ),
                 onPressed: () {
                   viewModel.sortList = !viewModel.sortList;
-                  viewModel.sortList
-                      ? viewModel.usersData
-                          .sort((a, b) => a.name.compareTo(b.name))
-                      : viewModel.usersData =
-                          viewModel.usersData.reversed.toList();
+                  print(viewModel.sortList);
                   print(viewModel.usersData[0].name);
                 },
               ),

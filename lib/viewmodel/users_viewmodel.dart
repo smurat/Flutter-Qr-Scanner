@@ -44,6 +44,10 @@ class UsersViewModel with ChangeNotifier {
   bool get sortList => _sortAZ;
 
   set sortList(bool value) {
+    if (!_sortAZ) {
+      usersData.sort((a, b) => a.name.compareTo(b.name));
+    } else
+      usersData = usersData.reversed.toList();
     _sortAZ = value;
     notifyListeners();
   }
