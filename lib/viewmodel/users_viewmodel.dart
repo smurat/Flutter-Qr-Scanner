@@ -41,13 +41,17 @@ class UsersViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  bool get sortList => _sortAZ;
-
-  set sortList(bool value) {
-    if (!_sortAZ) {
+  void sortUsers() {
+    sortList = !sortList;
+    if (_sortAZ) {
       usersData.sort((a, b) => a.name.compareTo(b.name));
     } else
       usersData = usersData.reversed.toList();
+  }
+
+  bool get sortList => _sortAZ;
+
+  set sortList(bool value) {
     _sortAZ = value;
     notifyListeners();
   }

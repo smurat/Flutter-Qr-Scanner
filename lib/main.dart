@@ -1,5 +1,6 @@
 import 'package:test_app_login/screens/active_users_screen.dart';
 import 'package:test_app_login/screens/login_screen.dart';
+import 'package:test_app_login/viewmodel/barcode_scan.dart';
 import 'package:test_app_login/viewmodel/users_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +8,11 @@ import 'helpers/locator.dart';
 
 void main() {
   setupLocator();
-  runApp(ChangeNotifierProvider(
-    create: (context) => locator<UsersViewModel>(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => locator<UsersViewModel>()),
+      ChangeNotifierProvider(create: (context) => locator<BarcodeScan>())
+    ],
     child: MyApp(),
   ));
 }
